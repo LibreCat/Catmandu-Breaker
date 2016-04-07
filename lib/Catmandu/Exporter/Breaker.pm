@@ -57,8 +57,8 @@ Catmandu::Exporter::Breaker - Package that exports OAI-PMH DC in a Breaker forma
   # From the command line
   $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker
 
-	# Using a MARCxml breaker
-	catmandu convert OAI --url http://lib.ugent.be/oai --metadataPrefix marcxml to Breaker --handler marcxml
+  # Using a MARCxml breaker
+  $ catmandu convert OAI --url http://lib.ugent.be/oai --metadataPrefix marcxml to Breaker --handler marcxml
 
 =head1 DESCRIPTION
 
@@ -72,7 +72,7 @@ into the Breaker format which can be analyzed further by command line tools.
 
 =head1 SEE ALSO
 
-L<Catmandu::Exporter>
+L<Catmandu::Importer::Breaker>
 
 =cut
 
