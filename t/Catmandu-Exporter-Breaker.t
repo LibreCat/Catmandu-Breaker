@@ -27,7 +27,7 @@ require_ok 'Catmandu::Exporter::Breaker';
 {
 	my $file = "";
 	my $importer = Catmandu->importer('JSON',file => 't/marcxml.json');
-	my $exporter = Catmandu::Exporter::Breaker->new(file => \$file, handler => 'marcxml');
+	my $exporter = Catmandu::Exporter::Breaker->new(file => \$file, handler => 'marc');
 
 	$exporter->add_many($importer);
 

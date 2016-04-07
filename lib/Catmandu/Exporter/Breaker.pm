@@ -58,7 +58,7 @@ Catmandu::Exporter::Breaker - Package that exports OAI-PMH DC in a Breaker forma
   $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker
 
   # Using a MARCxml breaker
-  $ catmandu convert OAI --url http://lib.ugent.be/oai --metadataPrefix marcxml to Breaker --handler marcxml
+  $ catmandu convert OAI --url http://lib.ugent.be/oai --metadataPrefix marcxml to Breaker --handler marc
 
 =head1 DESCRIPTION
 
