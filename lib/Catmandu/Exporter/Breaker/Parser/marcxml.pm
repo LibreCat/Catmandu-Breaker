@@ -9,9 +9,9 @@ our $VERSION = '0.01';
 sub add {
     my ($self, $data, $io) = @_;
     
-    return if $data->{_status} eq 'deleted';
+    return if exists $data->{_status} && $data->{_status} eq 'deleted';
 
-    my $identifier = $data->{_identifier};
+    my $identifier = $data->{_id};
 
     my $record = $data->{record};
 

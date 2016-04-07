@@ -8,10 +8,8 @@ our $VERSION = '0.01';
 
 sub add {
     my ($self, $data, $io) = @_;
-    
-    return if $data->{_status} eq 'deleted';
 
-    my $identifier = $data->{_identifier};
+    my $identifier = $data->{_id};
 
     for my $element (qw(
     	title creator contributor subject publisher date 
