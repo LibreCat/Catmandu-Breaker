@@ -39,9 +39,7 @@ sub _coerce_handler {
 sub add {
 	my ($self, $data) = @_;
 
-    binmode(STDOUT,":encoding(UTF-8)");
-
-	$self->handler->add($data);
+	$self->handler->add($data,$self->fh);
 }
 
 1;

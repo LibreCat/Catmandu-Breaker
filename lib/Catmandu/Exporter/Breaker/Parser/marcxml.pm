@@ -6,10 +6,8 @@ use namespace::clean;
 
 our $VERSION = '0.01';
 
-with 'Catmandu::Exporter';
-
 sub add {
-    my ($self, $data) = @_;
+    my ($self, $data, $io) = @_;
     
     return if $data->{_status} eq 'deleted';
 
@@ -33,12 +31,14 @@ sub add {
         $data =~ s{\n}{\\n}mg;
         $data =~ s{\t}{\\t}mg;
         
-        printf "%s\t{http://www.loc.gov/marc/bibliographic/}%s\t%s\t%s\t%s\n"
+        $io->print(
+            sprintf "%s\t{http://www.loc.gov/marc/bibliographic/}%s\t%s\t%s\t%s\n"
                     , $identifier
                     , $tag
                     , $ind1
                     , $ind2
-                    , $txt;
+                    , $txt
+        );
     }
 
     1;

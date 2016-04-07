@@ -6,10 +6,8 @@ use namespace::clean;
 
 our $VERSION = '0.01';
 
-with 'Catmandu::Exporter';
-
 sub add {
-    my ($self, $data) = @_;
+    my ($self, $data, $io) = @_;
     
     return if $data->{_status} eq 'deleted';
 
@@ -27,10 +25,12 @@ sub add {
     	for my $val (@$values) {
     		$val =~ s{\n}{\\n}mg;
             $val =~ s{\t}{\\t}mg;
-    		printf "%s\t{http://purl.org/dc/elements/1.1/}%s\t%s\n"
+    		$io->print(
+                sprintf("%s\t{http://purl.org/dc/elements/1.1/}%s\t%s\n"
     					, $identifier
     					, $element
-    					, $val;
+    					, $val)
+            );
     	}
     }
 
