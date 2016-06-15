@@ -5,7 +5,7 @@ use Moo;
 use Catmandu::Breaker;
 use namespace::clean;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 with 'Catmandu::Importer';
 
