@@ -4,6 +4,7 @@ our $VERSION = '0.01';
 
 use Moo;
 use Carp;
+use Catmandu::Exporter::Stat;
 
 has _counter => (is => 'ro', default => 0);
 
@@ -43,6 +44,41 @@ sub from_breaker {
   };
 }
 
+sub parse {
+   my ($self,$io) = @_;
+
+   my $exporter = Catmandu::Exporter::Stat->new;
+
+   my $rec     = {};
+   my $prev_id = undef;
+
+   while (my $line = $io->getline) {
+      chop($line);
+
+      my $brk   = $self->from_breaker($line);
+      my $id    = $brk->{identifier};
+      my $tag   = $brk->{tag};
+      my $value = $brk->{value};
+
+      if (defined($prev_id) && $prev_id ne $id) {
+         $exporter->add($rec);
+         $rec = {};
+      }
+
+      $rec->{_id} = $id;
+      if (exists $rec->{$tag}) {
+          $rec->{$tag} = [ $rec->{$tag} , $value ];
+      }
+      else {
+          $rec->{$tag} = $value;
+      }
+
+      $prev_id = $id;
+   }
+
+   $exporter->commit;
+}
+
 1;
 
 __END__
@@ -69,13 +105,13 @@ Catmandu::Breaker - Package that exports data in a Breaker format
   # Using an XML breaker
   $ catmandu convert XML --path book to Brealer --handler xml < t/book.xml > data.breaker
   
-  # Find the usage of fields in the XML file above
-  $ cat data.breaker | cut -f 2 | sort | uniq -c
+  # Find the usage statistics of fields in the XML file above
+  $ catmandu breaker data.breaker
 
-  # Parse the Breaker format
+  # Parse the Breaker format into JSON
   $ catmandu convert Breaker < data.breaker
 
-  # Parse the Breaker format group values by record
+  # Parse the Breaker format group values by record into JSON
   $ catmandu convert Breaker --group 1 < data.breaker
 
 =head1 DESCRIPTION

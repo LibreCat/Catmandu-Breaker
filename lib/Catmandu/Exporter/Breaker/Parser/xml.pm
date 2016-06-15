@@ -4,7 +4,6 @@ use Catmandu::Sane;
 use Moo;
 use Catmandu::Breaker;
 use Carp;
-use Data::Dumper;
 use namespace::clean;
 
 our $VERSION = '0.01';

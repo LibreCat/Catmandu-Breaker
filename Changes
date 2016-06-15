@@ -1,6 +1,7 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
-
+  - Adding the breaker command line tool
+  
 0.01  2016-06-15 14:59:07 CEST
   - initial release

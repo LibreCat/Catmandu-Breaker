@@ -7,3 +7,4 @@ on 'test', sub {
 };
 
 requires 'Catmandu', '>=0.9';
+requires 'Catmandu::Stat', '0';

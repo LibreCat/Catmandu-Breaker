@@ -66,8 +66,8 @@ Catmandu::Exporter::Breaker - Package that exports OAI-PMH DC in a Breaker forma
     # Using an XML breaker
     $ catmandu convert XML --path book to Brealer --handler xml < t/book.xml > data.breaker
 
-    # Find the usage of fields in the XML file above
-    $ cat data.breaker | cut -f 2 | sort | uniq -c
+    # Find the usage statistics of fields in the XML file above
+    $ catmandu breaker data.breaker
 
     # Convert the Breaker format by line into JSON
     $ catmandu convert Breaker < data.breaker
