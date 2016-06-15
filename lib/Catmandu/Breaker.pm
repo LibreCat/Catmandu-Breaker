@@ -2,6 +2,47 @@ package Catmandu::Breaker;
 
 our $VERSION = '0.01';
 
+use Moo;
+use Carp;
+
+has _counter => (is => 'ro', default => 0);
+
+sub counter {
+	my ($self) = @_;
+	$self->{_counter} = $self->{_counter} + 1;
+	$self->{_counter};
+}
+
+sub to_breaker {
+	my ($self,$identifier,$tag,$value) = @_;
+
+	croak "usage: to_breaker(idenifier,tag,value)"
+			unless defined($identifier)
+					&& defined($tag) && defined($value);
+
+	$value =~ s{\n}{\\n}mg;
+
+	sprintf "%s\t%s\t%s\n"
+    					, $identifier
+    					, $tag
+    					, $value;				
+}
+
+sub from_breaker {
+	my ($self,$line) = @_;
+
+	my ($id,$tag,$value) = split(/\s+/,$line,3);
+
+	croak "error line not in breaker format : $line"
+			unless defined($id) && defined($tag) && defined($value);
+
+  return +{
+    	identifier => $id ,
+    	tag        => $tag ,
+    	value      => $value
+  };
+}
+
 1;
 
 __END__
@@ -10,18 +51,26 @@ __END__
 
 =head1 NAME
 
-Catmandu::Breaker - Package that exports OAI-PMH DC in a Breaker format
+Catmandu::Breaker - Package that exports data in a Breaker format
 
 =head1 SYNOPSIS
 
   # From the command line
-  $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker
+
+  # Using the default breaker
+  $ catmandu convert JSON to Breaker < data.json
+
+  # Using a OAI_DC breaker 
+  $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker --handler oai_dc
 
   # Using a MARCXML breaker
-  $ catmandu convert OAI --url http://lib.ugent.be/oai --metadataPrefix marcxml to Breaker --handler marcxml
+  $ catmandu convert MARC to Breaker --handler marc
 
-  # Parser the Breaker format
+  # Parse the Breaker format
   $ catmandu convert Breaker < data.breaker
+
+  # Parse the Breaker format group values by record
+  $ catmandu convert Breaker --group 1 < data.breaker
 
 =head1 DESCRIPTION
 
@@ -45,7 +94,7 @@ into the Breaker format which can be analyzed further by command line tools.
 
 =head1 SEE ALSO
 
-L<Catmandu::OAI>
+L<Catmandu>
 
 =head1 AUTHOR
  

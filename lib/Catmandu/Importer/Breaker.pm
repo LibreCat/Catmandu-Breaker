@@ -2,13 +2,14 @@ package Catmandu::Importer::Breaker;
 
 use Catmandu::Sane;
 use Moo;
+use Catmandu::Breaker;
 use namespace::clean;
 
 our $VERSION = '0.01';
 
 with 'Catmandu::Importer';
 
-has record => (is => 'ro', default => sub { 0 });
+has group => (is => 'ro', default => sub { 0 });
 
 sub generator {
     my ($self) = @_;
@@ -17,31 +18,28 @@ sub generator {
         state $line;
         state $data = {};
 
+        my $breaker = Catmandu::Breaker->new;
+
         while ( defined( $line = $self->fh->getline ) ) {
             chomp $line;
             next if $line =~ /^\s*#/;
 
-            my ($id,$field,$values) = split(/\s+/,$line,3);
+            my $fields    = $breaker->from_breaker($line);
+
+            my $id        = $fields->{identifier};
+            my $tag       = $fields->{tag};
+            my $values    = $fields->{value};
 
             my $copy;
 
-            if ($self->record && defined($prev_id) && $id ne $prev_id) {
+            if ($self->group && defined($prev_id) && $id ne $prev_id) {
                 # Set a copy
                 $copy = {%$data};
                 $data = {};
             }
 
-            my ($namespace,$tag);
-
-            if ($field =~ /^{(.*)}(\S+)/) {
-                $namespace = $1;
-                $tag = $2;
-            }
-
-            if ($self->record) {
+            if ($self->group) {
                 $data->{_id} = $id;
-                push @{$data->{field}}      , $field;
-                push @{$data->{namespace}} , $namespace;
                 push @{$data->{tag}}       , $tag;
                 push @{$data->{data}}      , $values;
 
@@ -52,8 +50,6 @@ sub generator {
             else {
                 return {
                     _id       => $id ,
-                    field     => $field ,
-                    namespace => $namespace ,
                     tag       => $tag ,
                     data      => $values , 
                 };
@@ -90,7 +86,7 @@ Catmandu::Importer::Breaker - Package that imports the Breaker format
     $ catmandu convert Breaker < data.breaker
 
     # Convert the Breaker format by record into JSON
-    $ catmandu convert Breaker --record 1 < data.breaker
+    $ catmandu convert Breaker --group 1 < data.breaker
 
 =head1 DESCRIPTION
 
@@ -136,7 +132,6 @@ The breaker format is parsed into a Hash containing 4 fields:
 
     _id:   the idenifier of the record
     field: the full name (plus namespace) of a field
-    namespace: the namespace of a field
     tag:   the name of a field
     data:  the content of the field
 

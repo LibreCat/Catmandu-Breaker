@@ -10,7 +10,7 @@ our $VERSION = '0.01';
 
 with 'Catmandu::Exporter';
 
-has handler => (is => 'rw', default => sub {'oai_dc'} , coerce => \&_coerce_handler );
+has handler => (is => 'rw', default => sub {'json'} , coerce => \&_coerce_handler );
 
 sub _coerce_handler {
   my ($handler) = @_;
