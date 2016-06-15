@@ -9,7 +9,7 @@ our $VERSION = '0.01';
 
 with 'Catmandu::Importer';
 
-has group => (is => 'ro', default => sub { 0 });
+has record => (is => 'ro', default => sub { 0 });
 
 sub generator {
     my ($self) = @_;
@@ -32,13 +32,13 @@ sub generator {
 
             my $copy;
 
-            if ($self->group && defined($prev_id) && $id ne $prev_id) {
+            if ($self->record && defined($prev_id) && $id ne $prev_id) {
                 # Set a copy
                 $copy = {%$data};
                 $data = {};
             }
 
-            if ($self->group) {
+            if ($self->record) {
                 $data->{_id} = $id;
                 push @{$data->{tag}}       , $tag;
                 push @{$data->{data}}      , $values;
@@ -86,7 +86,7 @@ Catmandu::Importer::Breaker - Package that imports the Breaker format
     $ catmandu convert Breaker < data.breaker
 
     # Convert the Breaker format by record into JSON
-    $ catmandu convert Breaker --group 1 < data.breaker
+    $ catmandu convert Breaker --record 1 < data.breaker
 
 =head1 DESCRIPTION
 
