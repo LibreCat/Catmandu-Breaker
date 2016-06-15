@@ -30,7 +30,7 @@ Catmandu::Breaker - Package that exports data in a Breaker format
 # DESCRIPTION
 
 Inspired by the article "Metadata Analysis at the Command-Line" by Mark Phillips in
-[http://journal.code4lib.org/articles/7818](http://journal.code4lib.org/articles/7818) this exporter breaks a OAI-PMH DC harvest
+[http://journal.code4lib.org/articles/7818](http://journal.code4lib.org/articles/7818) this exporter breaks metadata records
 into the Breaker format which can be analyzed further by command line tools.
 
 # BREAKER FORMAT
