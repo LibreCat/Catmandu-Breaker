@@ -66,6 +66,12 @@ Catmandu::Breaker - Package that exports data in a Breaker format
   # Using a MARCXML breaker
   $ catmandu convert MARC to Breaker --handler marc
 
+  # Using an XML breaker
+  $ catmandu convert XML --path book to Brealer --handler xml < t/book.xml > data.breaker
+  
+  # Find the usage of fields in the XML file above
+  $ cat data.breaker | cut -f 2 | sort | uniq -c
+
   # Parse the Breaker format
   $ catmandu convert Breaker < data.breaker
 

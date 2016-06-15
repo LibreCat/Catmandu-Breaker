@@ -79,9 +79,21 @@ Catmandu::Importer::Breaker - Package that imports the Breaker format
 
 =head1 SYNOPSIS
 
-    # Import from a OAI-PMH repository
-    $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker > data.breaker
-    
+    # Using the default breaker
+    $ catmandu convert JSON to Breaker < data.json
+
+    # Using a OAI_DC breaker 
+    $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker --handler oai_dc
+
+    # Using a MARCXML breaker
+    $ catmandu convert MARC to Breaker --handler marc
+
+    # Using an XML breaker
+    $ catmandu convert XML --path book to Brealer --handler xml < t/book.xml > data.breaker
+
+    # Find the usage of fields in the XML file above
+    $ cat data.breaker | cut -f 2 | sort | uniq -c
+
     # Convert the Breaker format by line into JSON
     $ catmandu convert Breaker < data.breaker
 
@@ -91,8 +103,8 @@ Catmandu::Importer::Breaker - Package that imports the Breaker format
 =head1 DESCRIPTION
 
 Inspired by the article "Metadata Analysis at the Command-Line" by Mark Phillips in
-L<http://journal.code4lib.org/articles/7818> this exporter breaks a OAI-PMH DC harvest
-into the Breaker format which can be analyzed further by command line tools.
+L<http://journal.code4lib.org/articles/7818> this exporter breaks a metadata records
+into the Breaker format which can be analyzed further with command line tools.
 
 =head1 CONFIGURATION
 
