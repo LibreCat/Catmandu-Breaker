@@ -6,7 +6,7 @@ use Catmandu::Expander;
 use Catmandu::Breaker;
 use namespace::clean;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has breaker => (is => 'lazy');
 
