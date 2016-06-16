@@ -1,7 +1,11 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
-
+  - Fixed bugs in the statistical format
+  - Breaker for MARC breaks on every MARC-subfield
+  - Deleted OAI-DC breaker
+  - More POD
+  
 0.02  2016-06-15 16:21:56 CEST
   - Adding the breaker command line tool
   

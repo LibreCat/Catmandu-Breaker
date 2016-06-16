@@ -6,7 +6,7 @@ our $VERSION = '0.02';
 
 use parent 'Catmandu::Cmd';
 use Catmandu;
-use Catmandu::Util;
+
 use Catmandu::Breaker;
 use namespace::clean;
 
@@ -20,11 +20,9 @@ sub command {
 
     my $file = $args->[0];
 
-    my $io = Catmandu::Util::io($file);
-
     my $breaker = Catmandu::Breaker->new;
 
-    $breaker->parse($io);
+    $breaker->parse($file);
 }
 
 1;
@@ -41,7 +39,7 @@ Catmandu::Cmd::breaker - Parse Catmandu::Breaker exports
 
   catmandu breaker <BREAKER.FILE>
 
-  $ catmandu convert XML --path book to Brealer --handler xml < t/book.xml > data.breaker
+  $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml > data.breaker
   $ catmandu breaker data.breaker
 
 =cut

@@ -22,27 +22,27 @@ sub add {
 
     for my $field (@$record) {
         my ($tag,$ind1,$ind2,@data) = @$field;
-        $ind1 = ' ' unless $ind1;
-        $ind2 = ' ' unless $ind2;
+
         my $txt = '';
+
         for (my $i = 0 ; $i < @data ; $i += 2) {
             if ($i == 0 && $data[$i] eq '_') {
-                $txt .= $data[$i+1];
+                $io->print(
+                    $self->breaker->to_breaker(
+                        $identifier ,
+                        $tag ,
+                        $data[$i+1])
+                );
             }
             else {
-                $txt .= '$$' . $data[$i] . $data[$i+1];
+                $io->print(
+                    $self->breaker->to_breaker(
+                        $identifier ,
+                        $tag . $data[$i] ,
+                        $data[$i+1])
+                );
             }
         }
-
-        $data =~ s{\n}{\\n}mg;
-        $data =~ s{\t}{\\t}mg;
-        
-        $io->print(
-            $self->breaker->to_breaker(
-                $identifier ,
-                $tag ,
-                $txt)
-        );
     }
 
     1;
