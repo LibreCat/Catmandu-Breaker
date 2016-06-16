@@ -206,7 +206,7 @@ For instance, without a special handler:
     fol05731351   record[][]  0
     fol05731351   record[][]  a
 
-With a special hander:
+With a special handler:
 
     $ catmandu convert MARC to Breaker --handler marc < t/camel.usmarc
 
