@@ -6,6 +6,7 @@ use Moo;
 use Carp;
 use Catmandu::Exporter::Stat;
 use Catmandu::Util;
+use Catmandu;
 use Data::Dumper;
 
 has _counter => (is => 'ro', default => 0);
@@ -28,36 +29,36 @@ sub to_breaker {
 	sprintf "%s\t%s\t%s\n"
     					, $identifier
     					, $tag
-    					, $value;				
+    					, $value;
 }
 
 sub from_breaker {
-	my ($self,$line) = @_;
+    my ($self,$line) = @_;
 
-	my ($id,$tag,$value) = split(/\s+/,$line,3);
+    my ($id,$tag,$value) = split(/\s+/,$line,3);
 
-	croak "error line not in breaker format : $line"
-			unless defined($id) && defined($tag) && defined($value);
+    croak "error line not in breaker format : $line"
+    		unless defined($id) && defined($tag) && defined($value);
 
-  return +{
+    return +{
     	identifier => $id ,
     	tag        => $tag ,
     	value      => $value
-  };
+    };
 }
 
 sub parse {
-   my ($self,$file) = @_;
+    my ($self,$file) = @_;
 
-   my $tags     = $self->scan_tags($file);
+    my $tags     = $self->scan_tags($file);
 
-   my $io       = Catmandu::Util::io($file);
-   my $exporter = Catmandu::Exporter::Stat->new(fields => $tags);
+    my $io       = Catmandu::Util::io($file);
+    my $exporter = Catmandu::Exporter::Stat->new(fields => $tags);
 
-   my $rec     = {};
-   my $prev_id = undef;
+    my $rec     = {};
+    my $prev_id = undef;
 
-   while (my $line = $io->getline) {
+    while (my $line = $io->getline) {
       chop($line);
 
       my $brk   = $self->from_breaker($line);
@@ -73,7 +74,7 @@ sub parse {
       $rec->{_id} = $id;
 
       if (exists $rec->{$tag}) {
-          my $prev = ref($rec->{$tag}) eq 'ARRAY' ? $rec->{$tag} : [$rec->{$tag}]; 
+          my $prev = ref($rec->{$tag}) eq 'ARRAY' ? $rec->{$tag} : [$rec->{$tag}];
           $rec->{$tag} = [ @$prev , $value ];
       }
       else {
@@ -81,12 +82,12 @@ sub parse {
       }
 
       $prev_id = $id;
-   }
+    }
 
-   $io->close;
-   $exporter->add($rec);
+    $io->close;
+    $exporter->add($rec);
 
-   $exporter->commit;
+    $exporter->commit;
 }
 
 sub scan_tags  {
@@ -94,7 +95,7 @@ sub scan_tags  {
 
     my $tags = {};
     my $io = Catmandu::Util::io($file);
-    
+
     while (my $line = $io->getline) {
       chop($line);
       my $brk   = $self->from_breaker($line);
@@ -132,7 +133,7 @@ Catmandu::Breaker - Package that exports data in a Breaker format
 
   # Using an XML breaker
   $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml > data.breaker
-  
+
   # Find the usage statistics of fields in the XML file above
   $ catmandu breaker data.breaker
 
@@ -180,7 +181,7 @@ the breaker command 'catmandu convert YAML to Breaker < file.yml' will generate:
 
 The first column is a counter for each record (or the content of the _id field when present).
 The second column provides a JSON path to the data (with the array-paths translated to []).
-The third column is the field value. 
+The third column is the field value.
 
 One can use this output in combination with Unix tools like C<grep>, C<sort>, C<cut>, etc to
 inspect the breaker output:
@@ -188,7 +189,7 @@ inspect the breaker output:
     $ catmandu convert YAML to Breaker < file.yml | grep 'institution.years'
 
 Some input formats, like MARC, the JSON-path format doesn't provide much information
-which fields are present in the MARC because field names are part of the data. It is 
+which fields are present in the MARC because field names are part of the data. It is
 then possible to use a special C<handler> to create a more verbose breaker
 output.
 
@@ -254,9 +255,9 @@ fields contain the same information (entropy is minimum).
 See L<Catmandu::Exporter::Stat> for more information about the statistical fields.
 
 =head1 MODULES
- 
+
 =over
- 
+
 =item * L<Catmandu::Exporter::Breaker>
 
 =item * L<Catmandu::Cmd::breaker>
@@ -268,7 +269,7 @@ See L<Catmandu::Exporter::Stat> for more information about the statistical field
 L<Catmandu>, L<Catmandu::MARC>, L<Catmandu::XML>, L<Catmandu::Stat>
 
 =head1 AUTHOR
- 
+
 Patrick Hochstenbach, C<< <patrick.hochstenbach at ugent.be> >>
 
 =cut
