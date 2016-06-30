@@ -1,6 +1,7 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
+  - Adding verbose option
 
 0.03  2016-06-16 09:07:37 CEST
   - Fixed bugs in the statistical format

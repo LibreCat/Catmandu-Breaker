@@ -10,6 +10,12 @@ use Catmandu;
 use Catmandu::Breaker;
 use namespace::clean;
 
+sub command_opt_spec {
+    (
+        ["verbose|v",     ""],
+    );
+}
+
 sub command {
     my ($self, $opts, $args) = @_;
 
@@ -20,7 +26,7 @@ sub command {
 
     my $file = $args->[0];
 
-    my $breaker = Catmandu::Breaker->new;
+    my $breaker = Catmandu::Breaker->new(verbose => $opts->verbose);
 
     $breaker->parse($file);
 }

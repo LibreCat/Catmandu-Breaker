@@ -4,11 +4,12 @@ our $VERSION = '0.03';
 
 use Moo;
 use Carp;
-use Catmandu::Exporter::Stat;
+use Catmandu;
 use Catmandu::Util;
 use Catmandu;
 use Data::Dumper;
 
+has verbose  => (is => 'ro', default => 0);
 has _counter => (is => 'ro', default => 0);
 
 sub counter {
@@ -52,14 +53,20 @@ sub parse {
 
     my $tags     = $self->scan_tags($file);
 
-    my $io       = Catmandu::Util::io($file);
-    my $exporter = Catmandu::Exporter::Stat->new(fields => $tags);
+    my $importer = Catmandu->importer('Text', file => $file);
+    my $exporter = Catmandu->exporter('Stat', fields => $tags);
 
     my $rec     = {};
     my $prev_id = undef;
 
-    while (my $line = $io->getline) {
-      chop($line);
+    my $it = $importer;
+
+    if ($self->verbose) {
+        $it = $importer->benchmark();
+    }
+
+    $it->each(sub {
+      my $line  = $_[0]->{text};
 
       my $brk   = $self->from_breaker($line);
       my $id    = $brk->{identifier};
@@ -82,9 +89,7 @@ sub parse {
       }
 
       $prev_id = $id;
-    }
-
-    $io->close;
+    });
     $exporter->add($rec);
 
     $exporter->commit;
@@ -234,17 +239,17 @@ Statistical information can be calculated from a breaker output using the
     $ catmandu convert MARC to Breaker --handler marc < t/camel.usmarc > data.breaker
     $ catmandu breaker data.breaker
 
-    | name | count | zeros | zeros% | min | max | mean | median | mode   | variance | stdev | uniq | entropy |
+    | name | count | zeros | zeros% | min | max | mean | median | mode   | variance | stdev | uniq%| entropy |
     |------|-------|-------|--------|-----|-----|------|--------|--------|----------|-------|------|---------|
-    | 001  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 003  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 005  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 008  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 010a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 020a | 9     | 1     | 10.0   | 0   | 1   | 0.9  | 1      | 1      | 0.09     | 0.3   | 9    | 3.3/3.3 |
-    | 040a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 040c | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 040d | 5     | 5     | 50.0   | 0   | 1   | 0.5  | 0.5    | [0, 1] | 0.25     | 0.5   | 1    | 1.0/3.3 |
+    | 001  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 003  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 005  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 008  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 010a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 020a | 9     | 1     | 10.0   | 0   | 1   | 0.9  | 1      | 1      | 0.09     | 0.3   | 90   | 3.3/3.3 |
+    | 040a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 040c | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 040d | 5     | 5     | 50.0   | 0   | 1   | 0.5  | 0.5    | [0, 1] | 0.25     | 0.5   | 10   | 1.0/3.3 |
 
 The output table provides statistical information on the usage of fields in the
 original format. We see that the C<001> field was counted 10 times in the data set,

@@ -24,7 +24,7 @@ sub add {
 
     for my $tag (sort keys %$collapse) {
         my $value = $collapse->{$tag};
-        
+
         $tag =~ s{\.\d+}{[]}g;
 
         $io->print(
