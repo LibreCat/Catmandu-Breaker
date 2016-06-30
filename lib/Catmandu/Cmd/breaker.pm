@@ -2,7 +2,7 @@ package Catmandu::Cmd::breaker;
 
 use Catmandu::Sane;
 
-our $VERSION = '0.03';
+our $VERSION = '0.10';
 
 use parent 'Catmandu::Cmd';
 use Catmandu;
