@@ -15,11 +15,29 @@ Catmandu::Breaker - Package that exports data in a Breaker format
     # Using a MARC breaker
     $ catmandu convert MARC to Breaker --handler marc < data.mrc
 
-    # Using an XML breaker
-    $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml > data.breaker
-    
+    # Using an XML breaker plus create a list of unique record fields
+    $ catmandu convert XML --path book to Breaker --handler xml --fields data.fields < t/book.xml > data.breaker
+
     # Find the usage statistics of fields in the XML file above
     $ catmandu breaker data.breaker
+
+    # Use the list of unique fields in the report
+    $ catmandu breaker --fields data.fields data.breaker
+
+    # verbose output
+    $ catmandu breaker -v data.breaker
+
+    # The breaker commands needs to know the unique fields in the dataset to build statistics.
+    # By default it will scan the whole file for fields. This can be a very
+    # time consuming process. With --maxscan one can limit the number of lines
+    # in the breaker file that can be scanned for unique fields
+    $ catmandu breaker -v --maxscan 1000000 data.breaker
+
+    # Alternatively the fields option can be used to specify the unique fields
+    $ catmandu breaker -v --fields 245a,022a data.breaker
+
+    $ cat data.breaker | cut -f 2 | sort -u > data.fields
+    $ catmandu breaker -v --fields data.fields data.breaker
 
 # DESCRIPTION
 
@@ -65,7 +83,7 @@ the breaker command 'catmandu convert YAML to Breaker < file.yml' will generate:
 
 The first column is a counter for each record (or the content of the \_id field when present).
 The second column provides a JSON path to the data (with the array-paths translated to \[\]).
-The third column is the field value. 
+The third column is the field value.
 
 One can use this output in combination with Unix tools like `grep`, `sort`, `cut`, etc to
 inspect the breaker output:
@@ -73,7 +91,7 @@ inspect the breaker output:
     $ catmandu convert YAML to Breaker < file.yml | grep 'institution.years'
 
 Some input formats, like MARC, the JSON-path format doesn't provide much information
-which fields are present in the MARC because field names are part of the data. It is 
+which fields are present in the MARC because field names are part of the data. It is
 then possible to use a special `handler` to create a more verbose breaker
 output.
 
@@ -118,17 +136,17 @@ Statistical information can be calculated from a breaker output using the
     $ catmandu convert MARC to Breaker --handler marc < t/camel.usmarc > data.breaker
     $ catmandu breaker data.breaker
 
-    | name | count | zeros | zeros% | min | max | mean | median | mode   | variance | stdev | uniq | entropy |
+    | name | count | zeros | zeros% | min | max | mean | median | mode   | variance | stdev | uniq%| entropy |
     |------|-------|-------|--------|-----|-----|------|--------|--------|----------|-------|------|---------|
-    | 001  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 003  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 005  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 008  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 010a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 3.3/3.3 |
-    | 020a | 9     | 1     | 10.0   | 0   | 1   | 0.9  | 1      | 1      | 0.09     | 0.3   | 9    | 3.3/3.3 |
-    | 040a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 040c | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 1    | 0.0/3.3 |
-    | 040d | 5     | 5     | 50.0   | 0   | 1   | 0.5  | 0.5    | [0, 1] | 0.25     | 0.5   | 1    | 1.0/3.3 |
+    | 001  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 003  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 005  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 008  | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 010a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 100  | 3.3/3.3 |
+    | 020a | 9     | 1     | 10.0   | 0   | 1   | 0.9  | 1      | 1      | 0.09     | 0.3   | 90   | 3.3/3.3 |
+    | 040a | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 040c | 10    | 0     | 0.0    | 1   | 1   | 1    | 1      | 1      | 0        | 0     | 10   | 0.0/3.3 |
+    | 040d | 5     | 5     | 50.0   | 0   | 1   | 0.5  | 0.5    | [0, 1] | 0.25     | 0.5   | 10   | 1.0/3.3 |
 
 The output table provides statistical information on the usage of fields in the
 original format. We see that the `001` field was counted 10 times in the data set,

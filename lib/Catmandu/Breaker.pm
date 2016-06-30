@@ -9,8 +9,10 @@ use Catmandu::Util;
 use Catmandu;
 use Data::Dumper;
 
-has verbose  => (is => 'ro', default => 0);
-has _counter => (is => 'ro', default => 0);
+has verbose  => (is => 'ro', default => sub { 0  });
+has maxscan  => (is => 'ro', default => sub { -1 });
+has tags     => (is => 'ro');
+has _counter => (is => 'ro', default => sub { 0  });
 
 sub counter {
 	my ($self) = @_;
@@ -51,7 +53,7 @@ sub from_breaker {
 sub parse {
     my ($self,$file) = @_;
 
-    my $tags     = $self->scan_tags($file);
+    my $tags     = $self->tags // $self->scan_tags($file);
 
     my $importer = Catmandu->importer('Text', file => $file);
     my $exporter = Catmandu->exporter('Stat', fields => $tags);
@@ -101,11 +103,19 @@ sub scan_tags  {
     my $tags = {};
     my $io = Catmandu::Util::io($file);
 
+    print STDERR "Scanning:\n" if $self->verbose;
+    my $n = 0;
     while (my $line = $io->getline) {
+      $n++;
       chop($line);
+
+      print STDERR "..$n\n" if ($self->verbose && $n % 1000 == 0);
+
       my $brk   = $self->from_breaker($line);
       my $tag   = $brk->{tag};
       $tags->{$tag} = 1 ;
+
+      last if ($self->maxscan > 0 && $n > $self->maxscan);
     }
 
     $io->close;
@@ -136,11 +146,29 @@ Catmandu::Breaker - Package that exports data in a Breaker format
   # Using a MARC breaker
   $ catmandu convert MARC to Breaker --handler marc < data.mrc
 
-  # Using an XML breaker
-  $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml > data.breaker
+  # Using an XML breaker plus create a list of unique record fields
+  $ catmandu convert XML --path book to Breaker --handler xml --fields data.fields < t/book.xml > data.breaker
 
   # Find the usage statistics of fields in the XML file above
   $ catmandu breaker data.breaker
+
+  # Use the list of unique fields in the report
+  $ catmandu breaker --fields data.fields data.breaker
+
+  # verbose output
+  $ catmandu breaker -v data.breaker
+
+  # The breaker commands needs to know the unique fields in the dataset to build statistics.
+  # By default it will scan the whole file for fields. This can be a very
+  # time consuming process. With --maxscan one can limit the number of lines
+  # in the breaker file that can be scanned for unique fields
+  $ catmandu breaker -v --maxscan 1000000 data.breaker
+
+  # Alternatively the fields option can be used to specify the unique fields
+  $ catmandu breaker -v --fields 245a,022a data.breaker
+
+  $ cat data.breaker | cut -f 2 | sort -u > data.fields
+  $ catmandu breaker -v --fields data.fields data.breaker
 
 =head1 DESCRIPTION
 

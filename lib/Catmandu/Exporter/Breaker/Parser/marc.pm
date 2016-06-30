@@ -7,6 +7,7 @@ use namespace::clean;
 
 our $VERSION = '0.03';
 
+has tags    => (is => 'ro' , default => sub { +{} });
 has breaker => (is => 'lazy');
 
 sub _build_breaker {
@@ -22,6 +23,8 @@ sub add {
 
     for my $field (@$record) {
         my ($tag,$ind1,$ind2,@data) = @$field;
+
+        $self->tags->{$tag} = 1;
 
         my $txt = '';
 

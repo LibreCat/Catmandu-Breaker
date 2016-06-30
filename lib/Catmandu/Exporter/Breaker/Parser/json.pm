@@ -8,6 +8,7 @@ use namespace::clean;
 
 our $VERSION = '0.03';
 
+has tags    => (is => 'ro' , default => sub { +{} });
 has breaker => (is => 'lazy');
 
 sub _build_breaker {
@@ -26,6 +27,8 @@ sub add {
         my $value = $collapse->{$tag};
 
         $tag =~ s{\.\d+}{[]}g;
+
+        $self->tags->{$tag} = 1;
 
         $io->print(
             $self->breaker->to_breaker(

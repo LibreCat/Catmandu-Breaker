@@ -7,4 +7,5 @@ on 'test', sub {
 };
 
 requires 'Catmandu', '>=0.9';
-requires 'Catmandu::Stat', '0';
+requires 'Catmandu::Stat', '0.10';
+requires 'Path::Tiny', '0';
