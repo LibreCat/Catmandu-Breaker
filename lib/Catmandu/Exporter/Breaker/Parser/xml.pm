@@ -66,3 +66,17 @@ sub xpath_gen {
 1;
 
 __END__
+
+=head1 NAME
+
+Catmandu::Exporter::Breaker::Parser::xml - handler for XML format
+
+=head1 DESCRIPTION
+
+This L<Catmandu::Breaker> handler breaks XML format.
+
+=head1 SEE ALSO
+
+L<Catmandu::XML>
+
+=cut

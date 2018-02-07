@@ -26,8 +26,6 @@ sub add {
 
         $self->tags->{$tag} = 1;
 
-        my $txt = '';
-
         for (my $i = 0 ; $i < @data ; $i += 2) {
             if ($i == 0 && $data[$i] eq '_') {
                 $io->print(
@@ -54,3 +52,17 @@ sub add {
 1;
 
 __END__
+
+=head1 NAME
+
+Catmandu::Exporter::Breaker::Parser::marc - handler for MARC format
+
+=head1 DESCRIPTION
+
+This L<Catmandu::Breaker> handler breaks MARC format.
+
+=head1 SEE ALSO
+
+L<Catmandu::MARC>
+
+=cut
