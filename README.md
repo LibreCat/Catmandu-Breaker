@@ -170,3 +170,7 @@ See [Catmandu::Exporter::Stat](https://metacpan.org/pod/Catmandu::Exporter::Stat
 # AUTHOR
 
 Patrick Hochstenbach, `<patrick.hochstenbach at ugent.be>`
+
+# CONTRIBUTORS
+
+Jakob Voss, `nichtich at cpan.org`
