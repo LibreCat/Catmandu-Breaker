@@ -1,6 +1,8 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
+  - Adding PICA breaker (Jakob Voss)
+  - Adding more tests
 
 0.10  2016-06-30 15:03:48 CEST
   - Adding verbose option

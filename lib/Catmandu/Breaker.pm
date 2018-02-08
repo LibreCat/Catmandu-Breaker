@@ -307,4 +307,8 @@ L<Catmandu>, L<Catmandu::MARC>, L<Catmandu::XML>, L<Catmandu::Stat>
 
 Patrick Hochstenbach, C<< <patrick.hochstenbach at ugent.be> >>
 
+=head1 CONTRIBUTORS
+
+Jakob Voss, C<< nichtich at cpan.org >>
+
 =cut

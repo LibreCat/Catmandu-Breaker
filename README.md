@@ -109,7 +109,7 @@ For instance, without a special handler:
     fol05731351   record[][]  0
     fol05731351   record[][]  a
 
-With a special handler:
+With the special [marc handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::marc):
 
     $ catmandu convert MARC to Breaker --handler marc < t/camel.usmarc
 
@@ -124,7 +124,9 @@ With a special handler:
     fol05731351   040c  DLC
     fol05731351   040d  DLC
 
-For the [Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) tools an `xml` handler is available:
+For the [Catmandu::PICA](https://metacpan.org/pod/Catmandu::PICA) tools a [pica handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::pica) is available.
+
+For the [Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) tools an [xml handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::xml) is available:
 
     $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml
 
