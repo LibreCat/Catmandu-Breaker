@@ -38,7 +38,7 @@ sub command {
             $tags = join "," , path($opts->fields)->lines_utf8({chomp =>1});
         }
         else {
-            $tags = $opts->tags;
+            $tags = $opts->fields;
         }
     }
     my $breaker = Catmandu::Breaker->new(
