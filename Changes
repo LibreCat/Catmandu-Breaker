@@ -1,6 +1,7 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
+  - Adding support for --as FORMAT output formats (jorol)
 
 0.13  2018-09-03 11:31:40 CEST
   - Adding MAB2 support (jorol)
