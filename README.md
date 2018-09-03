@@ -174,3 +174,5 @@ Patrick Hochstenbach, `<patrick.hochstenbach at ugent.be>`
 # CONTRIBUTORS
 
 Jakob Voss, `nichtich at cpan.org`
+
+Johann Rolschewski, `jorol at cpan.org`
