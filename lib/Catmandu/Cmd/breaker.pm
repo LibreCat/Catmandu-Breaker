@@ -13,11 +13,11 @@ use namespace::clean;
 
 sub command_opt_spec {
     (   [ "verbose|v", "verbose output" ],
-        [   "maxscan=i",
-            "maximum number of lines to scan for uniq fields (default -1 = unlimited)"
+        [ "maxscan=i",
+          "maximum number of lines to scan for uniq fields (default -1 = unlimited)"
         ],
-        [   "fields=s",
-            "a file or comma delimited string of unique fields to use"
+        [ "fields=s",
+          "a file or comma delimited string of unique fields to use"
         ],
         [ "as=s", "set ouput format (default Table)" ],
     );

@@ -39,6 +39,9 @@ Catmandu::Breaker - Package that exports data in a Breaker format
     $ cat data.breaker | cut -f 2 | sort -u > data.fields
     $ catmandu breaker -v --fields data.fields data.breaker
 
+    # Export statistics as CSV. See L<Catmandu::Exporter::Stat> for supported formats.
+    $ catmandu breaker --as CSV data.breaker
+
 # DESCRIPTION
 
 Inspired by the article "Metadata Analysis at the Command-Line" by Mark Phillips in
@@ -126,6 +129,8 @@ With the special [marc handler](https://metacpan.org/pod/Catmandu::Exporter::Bre
 
 For the [Catmandu::PICA](https://metacpan.org/pod/Catmandu::PICA) tools a [pica handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::pica) is available.
 
+For the [Catmandu::MAB2](https://metacpan.org/pod/Catmandu::MAB2) tools a [mab handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::mab) is available.
+
 For the [Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) tools an [xml handler](https://metacpan.org/pod/Catmandu::Exporter::Breaker::Parser::xml) is available:
 
     $ catmandu convert XML --path book to Breaker --handler xml < t/book.xml
@@ -156,7 +161,8 @@ but the `040d` value is only present 5 times. The `020a` is empty in 10% (zeros%
 of the records. The `001` has very unique values (entropy is maximum), but all `040c`
 fields contain the same information (entropy is minimum).
 
-See [Catmandu::Exporter::Stat](https://metacpan.org/pod/Catmandu::Exporter::Stat) for more information about the statistical fields.
+See [Catmandu::Exporter::Stat](https://metacpan.org/pod/Catmandu::Exporter::Stat) for more information about the statistical fields
+and supported output formats.
 
 # MODULES
 
