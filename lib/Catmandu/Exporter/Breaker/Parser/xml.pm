@@ -6,7 +6,7 @@ use Catmandu::Breaker;
 use Carp;
 use namespace::clean;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 has tags    => (is => 'ro' , default => sub { +{} });
 has breaker => (is => 'lazy');
