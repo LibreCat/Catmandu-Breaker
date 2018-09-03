@@ -311,4 +311,6 @@ Patrick Hochstenbach, C<< <patrick.hochstenbach at ugent.be> >>
 
 Jakob Voss, C<< nichtich at cpan.org >>
 
+Johann Rolschewski, C<< jorol at cpan.org >>
+
 =cut
