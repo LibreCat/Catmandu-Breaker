@@ -70,7 +70,7 @@ Catmandu::Exporter::Breaker - Package that exports OAI-PMH DC in a Breaker forma
     $ catmandu convert JSON to Breaker < data.json
 
     # Using a OAI_DC breaker
-    $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker --handler oai_dc
+    $ catmandu convert OAI --url http://biblio.ugent.be/oai to Breaker
 
     # Using a MARCXML breaker
     $ catmandu convert MARC to Breaker --handler marc

@@ -23,6 +23,8 @@ sub counter {
 sub to_breaker {
     my ( $self, $identifier, $tag, $value ) = @_;
 
+    $value //= '';
+
     croak "usage: to_breaker(idenifier,tag,value)"
         unless defined($identifier) && defined($tag) && defined($value);
 
