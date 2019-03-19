@@ -1,6 +1,6 @@
 package Catmandu::Breaker;
 
-our $VERSION = '0.14';
+our $VERSION = '0.141';
 
 use Moo;
 use Carp;
