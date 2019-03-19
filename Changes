@@ -1,7 +1,8 @@
 Revision history for Catmandu-Breaker
 
 {{$NEXT}}
-
+  - Fixing null values bug
+  
 0.14  2018-09-03 13:42:04 CEST
   - Adding support for --as FORMAT output formats (jorol)
 
